@@ -30,6 +30,14 @@ TreeNode* insertIntoBST(TreeNode* root, int val) {
     return root;
 }
 
+// Function to delete the BST to prevent memory leaks
+void deleteTree(TreeNode* root) {
+    if (!root) return;
+    deleteTree(root->left);
+    deleteTree(root->right);
+    delete root;
+}
+
 // Function to perform reverse in-order traversal to get values in descending order
 void reverseInorder(TreeNode* root, vector<int>& result) {
     if (!root) return;
@@ -85,9 +93,8 @@ int main() {
     // Find and output the cnt-th largest element
     cout << findKthLargest(root, cnt) << endl;
     
-    // Clean up memory (optional for this problem)
-    // In a real application, you might want to delete the tree
-    // But for competitive programming, this is usually not necessary
+    // Clean up memory to prevent memory leaks
+    deleteTree(root);
     
     return 0;
 }
