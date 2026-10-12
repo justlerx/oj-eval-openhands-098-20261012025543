@@ -38,11 +38,31 @@ void reverseInorder(TreeNode* root, vector<int>& result) {
     reverseInorder(root->left, result);   // Visit left subtree last (smaller values)
 }
 
-// Function to find the cnt-th largest element in BST
+// Function to find the cnt-th largest element in BST without storing all values
 int findKthLargest(TreeNode* root, int cnt) {
-    vector<int> values;
-    reverseInorder(root, values);
-    return values[cnt - 1];  // cnt is 1-indexed
+    int count = 0;
+    int result = 0;
+    
+    // Helper lambda for reverse in-order traversal with early termination
+    function<void(TreeNode*)> reverseInorder = [&](TreeNode* node) {
+        if (!node || count >= cnt) return;
+        
+        // Visit right subtree first (larger values)
+        reverseInorder(node->right);
+        
+        // Process current node
+        count++;
+        if (count == cnt) {
+            result = node->val;
+            return;
+        }
+        
+        // Visit left subtree last (smaller values)
+        reverseInorder(node->left);
+    };
+    
+    reverseInorder(root);
+    return result;
 }
 
 int main() {
